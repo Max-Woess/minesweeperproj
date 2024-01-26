@@ -36,8 +36,6 @@ public class HelloController {
         }
 
 
-
-
         int columnsTotaly = 8;
         int rowsTotalx = 8;
         int ind = 0;
@@ -50,15 +48,27 @@ public class HelloController {
                 GridPane.setRowIndex(playPane, x);
                 GridPane.setColumnIndex(playPane, y);
                 gridPane.getChildren().add(playPane);
-                playPane.setText(x + " " + y);
+
                 if(bombFields.contains(ind)){
                     setBomb(playPane);
+                } else {
+                    int bombCountnearby = 0;
+                    for (int dx = -1; dx <= 1; dx++) {
+                        for (int dy = -1; dy <= 1; dy++) {
+                            int nx = x + dx;
+                            int ny = y + dy;
+                            if (nx >= 0 && ny >= 0 && nx < rowsTotalx && ny < columnsTotaly) {
+                                if (bombFields.contains(nx * columnsTotaly + ny)) {
+                                    bombCountnearby++;
+                                }
+                            }
+                        }
+                    }
+                    playPane.setText(Integer.toString(bombCountnearby));
                 }
                 ind++;
-
             }
         }
-
 
     }
 
@@ -76,10 +86,4 @@ public class HelloController {
         return ppane.hasBomb;
     }
 
-
-    @FXML
-    private int bombsNearby(){
-        //future implementation
-        return 0;
-    }
 }
