@@ -3,6 +3,8 @@ package com.example.minesweeperproj;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -11,10 +13,11 @@ public class HelloController {
 
     @FXML
     private GridPane gridPane;
+    Popup popup = new Popup();
+
 
     @FXML
     private void initialize() {
-
 
         final int easyBombCount = 8;
 
@@ -36,6 +39,7 @@ public class HelloController {
 
         int columnsTotaly = 8;
         int rowsTotalx = 8;
+        PlayPane[][] pPane = new PlayPane[rowsTotalx][columnsTotaly];
         int ind = 0;
         for (int x = 0; x < rowsTotalx; x++) {
             for (int y = 0; y < columnsTotaly; y++) {
@@ -49,13 +53,16 @@ public class HelloController {
                             if (bombFields.contains(nx * columnsTotaly + ny)) {
                                 bombCountnearby++;
                             }
+
+
                         }
                     }
                 }
 
 
 
-                PlayPane playPane = new PlayPane(bombCountnearby);
+                PlayPane playPane = new PlayPane(bombCountnearby, x, y, rowsTotalx, columnsTotaly, pPane);
+                pPane[x][y] = playPane;
                 playPane.setMinSize(50, 50);
                 playPane.setStyle("-fx-font-size:16");
                 GridPane.setRowIndex(playPane, x);
@@ -77,9 +84,5 @@ public class HelloController {
         pp.hasBomb = true;
     }
 
-    @FXML
-    private boolean checkForBomb(PlayPane ppane) {
-        return ppane.hasBomb;
-    }
 
 }
