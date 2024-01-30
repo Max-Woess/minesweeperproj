@@ -2,11 +2,15 @@ package com.example.minesweeperproj;
 
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.MouseButton;
+
+import java.text.Collator;
 
 public class PlayPane extends Button {
 
     boolean hasBomb = false;
     private boolean revealed = false;
+    boolean isFlagged = false;
     private int bombCountNearby;
 
     public PlayPane(int bombCountNearby) {
@@ -16,7 +20,11 @@ public class PlayPane extends Button {
     }
 
     private void handleMouseClick(MouseEvent mouseEvent) {
-        this.reveal();
+        if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+            this.reveal();
+        } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
+            this.flag();
+        }
     }
 
     public void reveal() {
@@ -26,8 +34,14 @@ public class PlayPane extends Button {
             this.setStyle("-fx-background-color: Red");
             this.setText("X");
         }else{
+            this.setStyle("-fx-background-color: White");
             this.setText(String.valueOf(bombCountNearby));
         }
+    }
+
+    public void flag(){
+        isFlagged = true;
+        this.setStyle("-fx-background-color: Blue");
     }
 
     public boolean isRevealed() {

@@ -64,12 +64,6 @@ public class HelloController {
 
                 if (bombFields.contains(ind)) {
                     setBomb(playPane);
-                } else {
-                    if (bombCountnearby == 0) {
-                        playPane.setText("0");
-                    } else {
-                        playPane.setText(Integer.toString(bombCountnearby));
-                    }
                 }
 
                 ind++;
