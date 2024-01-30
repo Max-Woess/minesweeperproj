@@ -16,9 +16,7 @@ public class HelloController {
     private void initialize() {
 
 
-
-
-        final int easyBombCount = 8 ;
+        final int easyBombCount = 8;
 
 
         Random rand = new Random();
@@ -26,12 +24,12 @@ public class HelloController {
 
         HashSet<Integer> bombFields = new HashSet<>();
 
-        while(bombFields.size() < bombCount){
+        while (bombFields.size() < bombCount) {
             int randomInt = rand.nextInt(64);
             bombFields.add(randomInt);
         }
 
-        for(int qwe : bombFields){
+        for (int qwe : bombFields) {
             System.out.println(qwe);
         }
 
@@ -42,47 +40,51 @@ public class HelloController {
         for (int x = 0; x < rowsTotalx; x++) {
             for (int y = 0; y < columnsTotaly; y++) {
 
-                PlayPane playPane = new PlayPane();
+                int bombCountnearby = 0;
+                for (int dx = -1; dx <= 1; dx++) {
+                    for (int dy = -1; dy <= 1; dy++) {
+                        int nx = x + dx;
+                        int ny = y + dy;
+                        if (nx >= 0 && ny >= 0 && nx < rowsTotalx && ny < columnsTotaly) {
+                            if (bombFields.contains(nx * columnsTotaly + ny)) {
+                                bombCountnearby++;
+                            }
+                        }
+                    }
+                }
+
+
+
+                PlayPane playPane = new PlayPane(bombCountnearby);
                 playPane.setMinSize(50, 50);
                 playPane.setStyle("-fx-font-size:16");
                 GridPane.setRowIndex(playPane, x);
                 GridPane.setColumnIndex(playPane, y);
                 gridPane.getChildren().add(playPane);
 
-                if(bombFields.contains(ind)){
+                if (bombFields.contains(ind)) {
                     setBomb(playPane);
                 } else {
-                    int bombCountnearby = 0;
-                    for (int dx = -1; dx <= 1; dx++) {
-                        for (int dy = -1; dy <= 1; dy++) {
-                            int nx = x + dx;
-                            int ny = y + dy;
-                            if (nx >= 0 && ny >= 0 && nx < rowsTotalx && ny < columnsTotaly) {
-                                if (bombFields.contains(nx * columnsTotaly + ny)) {
-                                    bombCountnearby++;
-                                }
-                            }
-                        }
+                    if (bombCountnearby == 0) {
+                        playPane.setText("0");
+                    } else {
+                        playPane.setText(Integer.toString(bombCountnearby));
                     }
-                    playPane.setText(Integer.toString(bombCountnearby));
                 }
+
                 ind++;
             }
         }
-
     }
 
 
-
     @FXML
-    private void setBomb(PlayPane pp){
-        pp.setText("x");
-        pp.setStyle("-fx-background-color: Red");
+    private void setBomb(PlayPane pp) {
         pp.hasBomb = true;
     }
 
     @FXML
-    private boolean checkForBomb(PlayPane ppane){
+    private boolean checkForBomb(PlayPane ppane) {
         return ppane.hasBomb;
     }
 
