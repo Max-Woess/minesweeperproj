@@ -1,8 +1,11 @@
 package com.example.minesweeperproj;
 
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.MouseButton;
+
+import java.util.HashSet;
 
 public class PlayPane extends Button {
 
@@ -14,8 +17,9 @@ public class PlayPane extends Button {
     int x, y;
     int rowsTotalx, columnsTotaly;
     PlayPane[][] playPane;
+    boolean dark;
 
-    public PlayPane(int bombCountNearby, int x, int y, int rowsTotalx, int columnsTotaly, PlayPane[][] playPane) {
+    public PlayPane(int bombCountNearby, int x, int y, int rowsTotalx, int columnsTotaly, PlayPane[][] playPane, boolean dark) {
         super();
         this.bombCountNearby = bombCountNearby;
         this.x = x;
@@ -23,6 +27,7 @@ public class PlayPane extends Button {
         this.rowsTotalx = rowsTotalx;
         this.columnsTotaly = columnsTotaly;
         this.playPane = playPane;
+        this.dark = dark;
         this.setOnMouseClicked(this::handleMouseClick);
     }
 
@@ -30,7 +35,11 @@ public class PlayPane extends Button {
         if (mouseEvent.getButton() == MouseButton.PRIMARY) {
             this.reveal();
         } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
-            this.flag();
+            if(this.isFlagged){
+                unfflag();
+            }else {
+                this.flag();
+            }
         }
     }
 
@@ -42,7 +51,7 @@ public class PlayPane extends Button {
             this.setText("X");
             System.exit(0);
         } else {
-            this.setStyle("-fx-background-color: White");
+            this.setStyle("-fx-background-color: lightgreen");
             this.setText(String.valueOf(bombCountNearby));
             System.out.println(bombCountNearby);
             revealConnectedTiles(bombCountNearby, x, y);
@@ -52,12 +61,25 @@ public class PlayPane extends Button {
 
     public void flag(){
         isFlagged = true;
-        this.setStyle("-fx-background-color: Blue");
+        if (checkAllBombsFlagged()) {
+            System.out.println("You Win!");
+        }
+        this.setStyle("-fx-graphic: url(Untitled-1.png)");
+    }
+    public void unfflag(){
+        isFlagged = false;
+        this.setStyle("-fx-graphic: none");
+        if(dark){
+            this.setStyle("-fx-background-color: darkgreen;");
+        }else{
+            this.setStyle("-fx-background-color: lime");
+        }
     }
 
     public boolean isRevealed() {
         return this.revealed;
     }
+
 
     public void revealConnectedTiles(int bombs, int x, int y) {
         System.out.println(bombs);
@@ -78,6 +100,20 @@ public class PlayPane extends Button {
                 }
             }
         }
+
+    }
+
+
+    public boolean checkAllBombsFlagged() {
+        for (int x = 0; x < rowsTotalx; x++) {
+            for (int y = 0; y < columnsTotaly; y++) {
+                PlayPane currentPane = playPane[x][y];
+                if (currentPane.hasBomb && !currentPane.isFlagged) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 
