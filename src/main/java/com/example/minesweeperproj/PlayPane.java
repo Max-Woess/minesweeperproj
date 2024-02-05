@@ -35,9 +35,9 @@ public class PlayPane extends Button {
         if (mouseEvent.getButton() == MouseButton.PRIMARY) {
             this.reveal();
         } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
-            if(this.isFlagged){
+            if (this.isFlagged) {
                 unfflag();
-            }else {
+            } else {
                 this.flag();
             }
         }
@@ -51,7 +51,8 @@ public class PlayPane extends Button {
             this.setText("X");
             System.exit(0);
         } else {
-            this.setStyle("-fx-background-color: lightgreen");
+
+            this.setStyle("-fx-opacity: 1");
             this.setText(String.valueOf(bombCountNearby));
             System.out.println(bombCountNearby);
             revealConnectedTiles(bombCountNearby, x, y);
@@ -59,19 +60,20 @@ public class PlayPane extends Button {
         }
     }
 
-    public void flag(){
+    public void flag() {
         isFlagged = true;
         if (checkAllBombsFlagged()) {
             System.out.println("You Win!");
         }
         this.setStyle("-fx-graphic: url(Untitled-1.png)");
     }
-    public void unfflag(){
+
+    public void unfflag() {
         isFlagged = false;
         this.setStyle("-fx-graphic: none");
-        if(dark){
+        if (dark) {
             this.setStyle("-fx-background-color: darkgreen;");
-        }else{
+        } else {
             this.setStyle("-fx-background-color: lime");
         }
     }
@@ -83,7 +85,7 @@ public class PlayPane extends Button {
 
     public void revealConnectedTiles(int bombs, int x, int y) {
         System.out.println(bombs);
-        if(!(bombs == 0)){
+        if (!(bombs == 0)) {
             return;
         }
 
